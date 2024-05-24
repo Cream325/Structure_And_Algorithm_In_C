@@ -34,18 +34,22 @@ void SLL_Append(Node** list, ElementType newData) {
 
 void SLL_Insert(Node** list, ElementType newData, int index) {
 	Node* newNode = LinkedList_CreateNode(newData);
-	Node* currentNode = SLL_Search(*list, (index - 1));
+	int length = SLL_Length(*list);
 
-	if ((*list) == NULL || index >= SLL_Length(*list)) {
-		SLL_Append(*list, newData);	
-		return;
-	}
+	if (index < 0) index = 0;
+	else if (index >= (length - 1)) index = length - 1;
 
 	if (index == 0) {
-		newNode->NextNode = currentNode;
+		newNode->NextNode = *list;
 		*list = newNode;
 	}
+	else if (index == (length - 1)) {
+		SLL_Append(list, newData);
+		return;
+	}
 	else {
+		Node* currentNode = SLL_Search(*list, index - 1);
+
 		newNode->NextNode = currentNode->NextNode;
 		currentNode->NextNode = newNode;
 	}

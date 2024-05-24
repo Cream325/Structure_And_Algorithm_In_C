@@ -12,8 +12,7 @@ int main(void) {
 	// 특정 값 삽입
 	SLL_Insert(&list, 10, 0);
 	SLL_Insert(&list, 100, 3);
-	/* 결과값 이상, 수정 필요
-	SLL_Insert(&list, 10, 5); */
+	SLL_Insert(&list, 10, 5);
 
 	// 특정 값 검색
 	Node* searchedNode = SLL_Search(list, 0);
