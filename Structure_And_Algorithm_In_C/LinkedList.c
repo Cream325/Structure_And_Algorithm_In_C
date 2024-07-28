@@ -33,8 +33,25 @@ void SLL_Append(Node** list, ElementType newData) {
 }
 
 void SLL_Insert(Node** list, ElementType newData, int index) {
-	Node* newNode = LinkedList_CreateNode(newData);
-	int length = SLL_Length(*list);
+	if (*(list) == NULL || index >= SLL_Length(*list)) {
+		SLL_Append(list, newData);
+	}
+	else {
+		Node* newNode = LinkedList_CreateNode(newData);
+
+		if (index == 0) {
+			newNode->NextNode = *list;
+			*list = newNode;
+		}
+		else {
+			Node* currentNode = SLL_Search(*list, index - 1);
+
+			newNode->NextNode = currentNode->NextNode;
+			currentNode->NextNode = newNode;
+		}
+	}
+
+	/*int length = SLL_Length(*list);
 
 	if (index < 0) index = 0;
 	else if (index >= (length - 1)) index = length - 1;
@@ -52,7 +69,7 @@ void SLL_Insert(Node** list, ElementType newData, int index) {
 
 		newNode->NextNode = currentNode->NextNode;
 		currentNode->NextNode = newNode;
-	}
+	}*/
 }
 
 Node* SLL_Search(Node* list, int index) {
