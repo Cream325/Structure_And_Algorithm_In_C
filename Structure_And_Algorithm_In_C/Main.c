@@ -2,27 +2,21 @@
 #include "LinkedList.h"
 
 int main(void) {
-	Node* list = NULL;
+	linkedList_t* list = SLL_Constructor();
 
-	// 값 추가
-	for (int i = 1; i <= 5; i++) {
-		SLL_Append(&list, i);
-	}
+	SLL_Append(&list, 1);
+	SLL_Append(&list, 2);
+	SLL_Append(&list, 3);
+	SLL_Append(&list, 4);
+	SLL_Append(&list, 5);
+	SLL_Append(&list, 6);
+	SLL_Append(&list, 7);
+	SLL_Append(&list, 8);
+	SLL_Append(&list, 9);
+	SLL_Append(&list, 10);
 
-	// 특정 값 삽입
-	SLL_Insert(&list, 10, 0);
-	SLL_Insert(&list, 100, 3);
-	SLL_Insert(&list, 10, 5);
-
-	// 특정 값 검색
-	Node* searchedNode = SLL_Search(list, 0);
-	printf("%d\n", searchedNode->Data);
-
-	// 특정 값 삭제
-	SLL_Delete(&list, 0);
-
-	// 리스트 출력
 	SLL_Traversal(list);
 
+	SLL_Destructor(list);
 	return 0;
 }

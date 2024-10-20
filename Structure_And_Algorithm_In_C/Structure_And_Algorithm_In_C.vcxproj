@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.c" />
+    <ClCompile Include="main.c" />
     <ClCompile Include="LinkedList.c" />
   </ItemGroup>
   <ItemGroup>
