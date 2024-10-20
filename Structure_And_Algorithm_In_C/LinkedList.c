@@ -10,14 +10,14 @@ linkedListNode_t* LinkedList_Constructor(ELEMENT_TYPE newData) {
 	newNode->data = newData;
 	newNode->nextNode= NULL;
 
-	//printf("Node is Created\n");
+	printf("Node is Created\n");
 
 	return newNode;
 }
 
 void LinkedList_Destructor(linkedListNode_t* node) {
 	free(node);
-	//printf("Node is Deleted\n");
+	printf("Node is Deleted\n");
 }
 #pragma endregion
 
@@ -142,77 +142,152 @@ void SLL_Traversal(linkedList_t* list) {
 }
 #pragma endregion
 
-// 이중 링크드 리스트 - 우선 주석처리
-/*
 #pragma region DoublyLinkedList 함수
 
-void DLL_Append(Node** list, ElementType newData) {
-	Node* newNode = LinkedList_CreateNode(newData);
+linkedList_t* DLL_Constructor() {
+	// 더블 링크드 리스트 동적 할당
+	linkedList_t* newList = (linkedList_t*)malloc(sizeof(linkedList_t));
 
-	if ((*list) == NULL) {
-		*list = newNode;
+	// 링크드 리스트 데이터 대입
+	newList->headNode = NULL;
+	newList->tailNode = NULL;
+	newList->length = 0;
+
+	printf("DLL is Created\n");
+
+	return newList;
+}
+
+void DLL_Destructor(linkedList_t* list) {
+	for (int i = list->length - 1; i >= 0; i--) {
+		DLL_Delete(&list, i);
+	}
+
+	free(list);
+	printf("DLL is Deleted\n");
+}
+
+void DLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
+	linkedListNode_t* newNode = LinkedList_Constructor(newData);
+
+	// 헤드가 null인 경우
+	if ((*list)->headNode == NULL) {
+		(*list)->headNode = newNode;
+		(*list)->tailNode = (*list)->headNode;
 	}
 	else {
-		Node* tailNode = (*list);
-
-		while (tailNode->NextNode != NULL) {
-			tailNode = tailNode->NextNode;
+		//헤드의 다음노드가 null인 경우, 일반적인 경우
+		if ((*list)->headNode->nextNode == NULL) {
+			(*list)->headNode->nextNode = newNode;
+			newNode->previousNode = (*list)->headNode;
+		}
+		else {
+			(*list)->tailNode->nextNode = newNode;
+			newNode->previousNode = (*list)->tailNode;
 		}
 
-		tailNode->NextNode = newNode;
-		newNode->PreviousNode = tailNode;
+		(*list)->tailNode = (*list)->tailNode->nextNode;
 	}
+
+	(*list)->length++;
 }
 
-void DLL_Insert(Node** list, ElementType newData, int index) {
+/*
+void DLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
+	linkedListNode_t* newNode = LinkedList_Constructor(newData);
 
+	// 헤드가 null인 경우, 인덱스가 0 이하인 경우
+	if ((*list)->headNode == NULL || index <= 0) {
+		newNode->nextNode = (*list)->headNode;
+		(*list)->headNode->previousNode = newNode;
+		(*list)->headNode = newNode;
+		(*list)->length++;
+		return;
+	}
+	
+	// 인덱스가 리스트 최대 인덱스 이상인 경우 (Append와 연산이 같음)
+	if (index >= (*list)->length - 1) {
+		(*list)->tailNode->nextNode = newNode;
+		newNode->previousNode = (*list)->tailNode;
+		(*list)->tailNode = (*list)->tailNode->nextNode;
+		(*list)->length++;
+		return;
+	}
+
+	// 일반적인 경우
+	linkedListNode_t* currentNode = DLL_Search(*list, index);
+	currentNode->previousNode->nextNode = newNode;
+	newNode->nextNode = currentNode;
+	currentNode->previousNode = newNode;
+	(*list)->length++;
 }
+*/
 
-Node* DLL_Search(Node* list, int index) {
-	Node* currentNode = list;
+linkedListNode_t* DLL_Search(linkedList_t* list, int index) {
+	linkedListNode_t* currentNode = NULL;
 
-	while (currentNode != NULL && (--index) >= 0) {
-		currentNode = currentNode->NextNode;
+	if (index <= list->length / 2) {
+		currentNode = list->headNode;
+		while (currentNode->nextNode != NULL && --index >= 0) {
+			currentNode = currentNode->nextNode;
+		}
+	}
+	else {
+		int maxIndex = list->length - 1;
+		currentNode = list->tailNode;
+		while (currentNode->previousNode != NULL && --maxIndex >= index) {
+			currentNode = currentNode->previousNode;
+		}
 	}
 
 	return currentNode;
 }
 
-void DLL_Delete(Node** list, int index) {
-	Node* deletedNode = NULL;
+linkedListNode_t DLL_Delete(linkedList_t** list, int index) {
+	linkedListNode_t deletedNode;
 
-	if (index == 0) {
-		deletedNode = *list;
-		*list = (*list)->NextNode;
-	}
-	else {
-		Node* currentNode = *list;
+	if ((*list)->headNode != NULL) {
+		// 헤드를 삭제할 경우
+		if ((*list)->headNode->nextNode == NULL || index <= 0) {
+			linkedListNode_t* tempNode = (*list)->headNode;
+			deletedNode = *tempNode;
+			(*list)->headNode = (*list)->headNode->nextNode;
+			LinkedList_Destructor(tempNode);
+		}
+		else {
+			index = index >= (*list)->length ? (*list)->length - 1 : index;
+			linkedListNode_t* currentNode = DLL_Search(*list, index);
 
-		while (currentNode != NULL && (--index) > 1) {
-			currentNode = currentNode->NextNode;
+			// 중간노드를 삭제할 경우
+			if (currentNode->nextNode != NULL) {
+				currentNode->previousNode->nextNode = currentNode->nextNode;
+				currentNode->nextNode->previousNode = currentNode->previousNode;
+			}
+			else {
+				// 테일을 삭제할 경우
+				currentNode->previousNode->nextNode = NULL;
+
+				(*list)->tailNode = currentNode->previousNode;
+				currentNode->previousNode = NULL;
+			}
+
+			deletedNode = *currentNode;
+			LinkedList_Destructor(currentNode);
 		}
 
-		deletedNode = currentNode->NextNode;
-		currentNode->NextNode = currentNode->NextNode->NextNode;
+		(*list)->length--;
 	}
 
-	LinkedList_DestroyNode(deletedNode);
+	return deletedNode;
 }
 
-void DLL_Traversal(Node* list) {
-	Node* currentNode = list;
+void DLL_Traversal(linkedList_t* list) {
+	linkedListNode_t* currentNode = list->headNode;
 
 	while (currentNode != NULL) {
-		printf("%d\n", currentNode->Data);
-		currentNode = currentNode->NextNode;
+		printf("%d ", currentNode->data);
+		currentNode = currentNode->nextNode;
 	}
-
-	printf("\n");
-}
-
-int DLL_Length(Node* list) {
-	return 0;
 }
 
 #pragma endregion
-*/

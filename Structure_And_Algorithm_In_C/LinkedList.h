@@ -93,16 +93,27 @@ void SLL_Traversal(linkedList_t* list);
 
 #pragma endregion
 
-// 이중 링크드 리스트 - 우선 주석처리
-/* 
 #pragma region DoublyLinkedList 함수
+
+/// <summary>
+/// 이중 링크드 리스트 - 생성자
+/// </summary>
+/// <param name=""></param>
+/// <returns></returns>
+linkedList_t* DLL_Constructor(void);
+
+/// <summary>
+/// 이중 링크드 리스트 - 소멸자
+/// </summary>
+/// <param name="list"></param>
+void DLL_Destructor(linkedList_t* list);
 
 /// <summary>
 /// 이중 링크드 리스트 - 단일 추가
 /// </summary>
 /// <param name="list"></param>
 /// <param name="newData"></param>
-void SLL_Append(Node** list, ElementType newData);
+void DLL_Append(linkedList_t** list, ELEMENT_TYPE newData);
 
 /// <summary>
 /// 이중 링크드 리스트 - 단일 삽입
@@ -110,7 +121,7 @@ void SLL_Append(Node** list, ElementType newData);
 /// <param name="list"></param>
 /// <param name="newData"></param>
 /// <param name="index"></param>
-void DLL_Insert(Node** list, ElementType newData, int index);
+void DLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index);
 
 /// <summary>
 /// 이중 링크드 리스트 - 단일 검색
@@ -118,30 +129,22 @@ void DLL_Insert(Node** list, ElementType newData, int index);
 /// <param name="list"></param>
 /// <param name="index"></param>
 /// <returns>Node* currentNode</returns>
-Node* DLL_Search(Node* list, int index);
+linkedListNode_t* DLL_Search(linkedList_t* list, int index);
 
 /// <summary>
 /// 이중 링크드 리스트 - 단일 삭제
 /// </summary>
 /// <param name="list"></param>
 /// <param name="index"></param>
-void DLL_Delete(Node** list, int index);
+linkedListNode_t DLL_Delete(linkedList_t** list, int index);
 
 /// <summary>
 /// 이중 링크드 리스트 - 순회
 /// </summary>
 /// <param name="list"></param>
-void DLL_Traversal(Node* list);
-
-/// <summary>
-/// 이중 링크드 리스트 - 리스트 길이
-/// </summary>
-/// <param name="list"></param>
-/// <returns></returns>
-int DLL_Length(Node* list);
+void DLL_Traversal(linkedList_t* list);
 
 #pragma endregion
-*/
 
 #pragma endregion
 
