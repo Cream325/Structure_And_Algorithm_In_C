@@ -9,11 +9,8 @@ int main(void) {
 	DLL_Append(&list, 3);
 	DLL_Append(&list, 4);
 	DLL_Append(&list, 5);
-	DLL_Append(&list, 6);
-	DLL_Append(&list, 7);
-	DLL_Append(&list, 8);
-	DLL_Append(&list, 9);
-	DLL_Append(&list, 10);
+
+	DLL_Insert(&list, 10, 0);
 
 	DLL_Traversal(list);
 
