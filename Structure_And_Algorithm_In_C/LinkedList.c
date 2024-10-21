@@ -301,3 +301,152 @@ void DLL_Traversal(linkedList_t* list) {
 }
 
 #pragma endregion
+
+#pragma region CircularLinkedList 함수
+
+linkedList_t* CLL_Constructor(void) {
+	// 순환 링크드 리스트 동적 할당
+	linkedList_t* newList = (linkedList_t*)malloc(sizeof(linkedList_t));
+
+	// 링크드 리스트 데이터 대입
+	newList->headNode = NULL;
+	newList->tailNode = NULL;
+	newList->length = 0;
+
+	return newList;
+}
+
+void CLL_Destructor(linkedList_t* list) {
+	for (int i = list->length - 1; i >= 0; i--) {
+		CLL_Delete(&list, i);
+	}
+
+	free(list);
+}
+
+void CLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
+	linkedListNode_t* newNode = LinkedList_Constructor(newData);
+
+	// 헤드가 null인 경우
+	if ((*list)->headNode == NULL) {
+		(*list)->headNode = newNode;
+		(*list)->tailNode = (*list)->headNode;
+
+		(*list)->headNode->nextNode = (*list)->tailNode;
+		(*list)->tailNode->previousNode = (*list)->headNode;
+	}
+	else {
+		// 일반적인 경우
+		(*list)->tailNode->nextNode = newNode;
+		newNode->previousNode = (*list)->tailNode;
+		(*list)->tailNode = (*list)->tailNode->nextNode;
+	}
+
+	(*list)->headNode->previousNode = (*list)->tailNode;
+	(*list)->tailNode->nextNode = (*list)->headNode;
+	(*list)->length++;
+}
+
+void CLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
+	// 헤드가 null인 경우
+	if ((*list)->headNode == NULL) {
+		CLL_Append(list, newData);
+		return;
+	}
+
+	linkedListNode_t* newNode = LinkedList_Constructor(newData);
+
+	// 헤드 다음노드가 null인 경우, 인덱스가 0이하인 경우
+	if ((*list)->headNode->nextNode == NULL || index <= 0) {
+		newNode->nextNode = (*list)->headNode;
+		(*list)->headNode->previousNode = newNode;
+		(*list)->headNode = newNode;
+		(*list)->length++;
+		return;
+	}
+
+	// 인덱스가 리스트 최대 인덱스 이상인 경우 (Append와 연산이 같음)
+	if (index >= (*list)->length - 1) {
+		(*list)->tailNode->nextNode = newNode;
+		newNode->previousNode = (*list)->tailNode;
+		(*list)->tailNode = newNode;
+
+		(*list)->tailNode->nextNode = (*list)->headNode;
+		(*list)->headNode->previousNode = (*list)->tailNode;
+		(*list)->length++;
+		return;
+	}
+
+	// 일반적인 경우
+	linkedListNode_t* currentNode = CLL_Search(*list, index);
+	currentNode->previousNode->nextNode = newNode;
+	newNode->nextNode = currentNode;
+	currentNode->previousNode = newNode;
+	(*list)->length++;
+}
+
+linkedListNode_t* CLL_Search(linkedList_t* list, int index) {
+	linkedListNode_t* currentNode;
+
+	if (index <= list->length / 2) {
+		currentNode = list->headNode;
+		while (currentNode->nextNode != NULL && --index >= 0) {
+			currentNode = currentNode->nextNode;
+		}
+	}
+	else {
+		int maxIndex = list->length - 1;
+		currentNode = list->tailNode;
+		while (currentNode->previousNode != NULL && --maxIndex >= index) {
+			currentNode = currentNode->previousNode;
+		}
+	}
+
+	return currentNode;
+}
+
+linkedListNode_t CLL_Delete(linkedList_t** list, int index) {
+	linkedListNode_t deletedNode;
+
+	if ((*list)->headNode != NULL) {
+		// 헤드를 삭제할 경우
+		if ((*list)->headNode->nextNode == (*list)->tailNode || index <= 0) {
+			linkedListNode_t* tempNode = (*list)->headNode;
+			deletedNode = *tempNode;
+			(*list)->tailNode->previousNode = (*list)->headNode->nextNode;
+			(*list)->headNode = (*list)->headNode->nextNode;
+			LinkedList_Destructor(tempNode);
+		}
+		else {
+			index = index >= (*list)->length ? (*list)->length - 1 : index;
+			linkedListNode_t* currentNode = CLL_Search(*list, index);
+
+			// 중간노드를 삭제할 경우
+			if (currentNode->nextNode != NULL) {
+				currentNode->previousNode->nextNode = currentNode->nextNode;
+				currentNode->nextNode->previousNode = currentNode->previousNode;
+			}
+			else {
+				// 테일을 삭제할 경우
+				currentNode->previousNode->nextNode = (*list)->headNode;
+			}
+
+			deletedNode = *currentNode;
+		}
+	}
+
+	(*list)->length--;
+	return deletedNode;
+}
+
+// 순회에 문제가 있음. 수정필요
+void CLL_Traversal(linkedList_t* list) {
+	linkedListNode_t* currentNode = list->headNode;
+
+	while (currentNode != list->tailNode->nextNode) {
+		printf("%d ", currentNode->data);
+		currentNode = currentNode->nextNode;
+	}
+}
+
+#pragma endregion

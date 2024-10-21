@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/* 추후, 다른 데이터 타입도 들어갈 수 있게 바꿀 필요가 있음. (C#과 코드흐름을 같이하기 위함) */
 //노드의 데이터 타입
 #define ELEMENT_TYPE int
 
@@ -143,6 +144,59 @@ linkedListNode_t DLL_Delete(linkedList_t** list, int index);
 /// </summary>
 /// <param name="list"></param>
 void DLL_Traversal(linkedList_t* list);
+
+#pragma endregion
+
+#pragma region CircularLinkedList 함수
+
+/// <summary>
+/// 순환 링크드 리스트 - 생성자
+/// </summary>
+/// <returns></returns>
+linkedList_t* CLL_Constructor();
+
+/// <summary>
+/// 순환 링크드 리스트 - 소멸자
+/// </summary>
+/// <param name="list"></param>
+void CLL_Destructor(linkedList_t* list);
+
+/// <summary>
+/// 순환 링크드 리스트 - 단일 추가
+/// </summary>
+/// <param name="list"></param>
+/// <param name="newData"></param>
+void CLL_Append(linkedList_t** list, ELEMENT_TYPE newData);
+
+/// <summary>
+/// 순환 링크드 리스트 - 단일 삽입
+/// </summary>
+/// <param name="list"></param>
+/// <param name="newData"></param>
+/// <param name="index"></param>
+void CLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index);
+
+/// <summary>
+/// 순환 링크드 리스트 - 단일 검색
+/// </summary>
+/// <param name="list"></param>
+/// <param name="index"></param>
+/// <returns></returns>
+linkedListNode_t* CLL_Search(linkedList_t* list, int index);
+
+/// <summary>
+/// 순환 링크드 리스트 - 단일 삭제
+/// </summary>
+/// <param name="list"></param>
+/// <param name="index"></param>
+/// <returns></returns>
+linkedListNode_t CLL_Delete(linkedList_t** list, int index);
+
+/// <summary>
+/// 순환 링크드 리스트 - 순회
+/// </summary>
+/// <param name="list"></param>
+void CLL_Traversal(linkedList_t* list);
 
 #pragma endregion
 

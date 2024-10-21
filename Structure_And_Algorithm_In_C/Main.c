@@ -2,18 +2,22 @@
 #include "LinkedList.h"
 
 int main(void) {
-	linkedList_t* list = DLL_Constructor();
+	linkedList_t* list = CLL_Constructor();
 
-	DLL_Append(&list, 1);
-	DLL_Append(&list, 2);
-	DLL_Append(&list, 3);
-	DLL_Append(&list, 4);
-	DLL_Append(&list, 5);
+	CLL_Append(&list, 1);
+	CLL_Append(&list, 2);
+	CLL_Append(&list, 3);
+	CLL_Append(&list, 4);
+	CLL_Append(&list, 5);
 
-	DLL_Insert(&list, 10, 0);
+	CLL_Insert(&list, 10, 0);
 
-	DLL_Traversal(list);
+	CLL_Traversal(list);
 
-	DLL_Destructor(list);
+	CLL_Destructor(list);
 	return 0;
 }
+
+// null pointer 또는 out of index에 대한 예외처리 필요
+// 1. Error Code 정의
+// 2. 각 Error Code에 대하여 예외처리
