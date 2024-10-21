@@ -347,6 +347,7 @@ void CLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
 	(*list)->length++;
 }
 
+// 삽입에 문제가 있음. 수정필요
 void CLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 	// 헤드가 null인 경우
 	if ((*list)->headNode == NULL) {
@@ -439,14 +440,16 @@ linkedListNode_t CLL_Delete(linkedList_t** list, int index) {
 	return deletedNode;
 }
 
-// 순회에 문제가 있음. 수정필요
 void CLL_Traversal(linkedList_t* list) {
 	linkedListNode_t* currentNode = list->headNode;
 
-	while (currentNode != list->tailNode->nextNode) {
+	if (currentNode == NULL)
+		return;
+
+	do {
 		printf("%d ", currentNode->data);
 		currentNode = currentNode->nextNode;
-	}
+	} while (currentNode != list->headNode);
 }
 
 #pragma endregion

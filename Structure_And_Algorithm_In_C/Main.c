@@ -10,7 +10,7 @@ int main(void) {
 	CLL_Append(&list, 4);
 	CLL_Append(&list, 5);
 
-	CLL_Insert(&list, 10, 0);
+	//CLL_Insert(&list, 10, 1);
 
 	CLL_Traversal(list);
 
