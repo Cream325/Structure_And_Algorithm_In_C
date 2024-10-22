@@ -381,6 +381,7 @@ void CLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 	// 일반적인 경우
 	linkedListNode_t* currentNode = CLL_Search(*list, index);
 	currentNode->previousNode->nextNode = newNode;
+	newNode->previousNode = currentNode->previousNode;
 	newNode->nextNode = currentNode;
 	currentNode->previousNode = newNode;
 	(*list)->length++;
