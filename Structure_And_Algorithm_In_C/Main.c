@@ -1,8 +1,8 @@
 ﻿#include <stdio.h>
-#include "LinkedList.h"
+#include "CustomStack.h"
 
 int main(void) {
-	linkedList_t* list = CLL_Constructor();
+	/*linkedList_t* list = CLL_Constructor();
 
 	CLL_Append(&list, 1);
 	CLL_Append(&list, 2);
@@ -14,7 +14,18 @@ int main(void) {
 
 	CLL_Traversal(list);
 
-	CLL_Destructor(list);
+	CLL_Destructor(list);*/
+
+	arrayStack_t* stack = ArrStack_Constructor(5);
+
+	ArrStack_Push(&stack, 1);
+	ArrStack_Push(&stack, 2);
+	ArrStack_Push(&stack, 3);
+	ArrStack_Push(&stack, 4);
+	ArrStack_Push(&stack, 5);
+
+	ArrStack_Destructor(stack);
+
 	return 0;
 }
 
