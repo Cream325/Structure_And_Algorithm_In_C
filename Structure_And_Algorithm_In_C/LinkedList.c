@@ -52,7 +52,7 @@ void SLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
 	// 헤드가 null인 경우
 	if ((*list)->headNode == NULL) {
 		(*list)->headNode = newNode;
-		(*list)->tailNode = (*list)->headNode;
+		(*list)->tailNode = newNode;
 	}
 	else {
 		// 헤드 다음노드가 null인 경우, 일반적인 경우
@@ -61,7 +61,7 @@ void SLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
 		else
 			(*list)->tailNode->nextNode = newNode;
 
-		(*list)->tailNode = (*list)->tailNode->nextNode;
+		(*list)->tailNode = newNode;
 	}
 
 	(*list)->length++;
@@ -75,8 +75,8 @@ void SLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 
 	linkedListNode_t* newNode = LinkedList_Constructor(newData);
 
-	// 헤드 다음노드가 null인 경우, 인덱스가 0 이하인 경우
-	if ((*list)->headNode->nextNode == NULL || index <= 0) {
+	// 인덱스가 0 이하인 경우
+	if (index <= 0) {
 		newNode->nextNode = (*list)->headNode;
 		(*list)->headNode = newNode;
 		(*list)->length++;
@@ -85,9 +85,7 @@ void SLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 
 	// 인덱스가 리스트 최대 인덱스 이상인 경우 (Append와 연산이 같음)
 	if (index >= (*list)->length - 1) {
-		(*list)->tailNode->nextNode = newNode;
-		(*list)->tailNode = (*list)->tailNode->nextNode;
-		(*list)->length++;
+		SLL_Append(list, newData);
 		return;
 	}
 
@@ -101,6 +99,7 @@ void SLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 
 linkedListNode_t* SLL_Search(linkedList_t* list, int index) {
 	linkedListNode_t* currentNode = list->headNode;
+
 	if (currentNode != NULL) {
 		while (currentNode->nextNode != NULL && --index >= 0) {
 			currentNode = currentNode->nextNode;
@@ -119,6 +118,7 @@ linkedListNode_t SLL_Delete(linkedList_t** list, int index) {
 			linkedListNode_t* tempNode = (*list)->headNode;
 			deletedNode = *tempNode;
 			(*list)->headNode = (*list)->headNode->nextNode;
+			tempNode->nextNode = NULL;
 			LinkedList_Destructor(tempNode);
 		}
 		else {
@@ -129,6 +129,11 @@ linkedListNode_t SLL_Delete(linkedList_t** list, int index) {
 			deletedNode = *tempNode;
 			currentNode->nextNode = tempNode->nextNode;
 			tempNode->nextNode = NULL;
+
+			// 테일을 삭제할 시, 테일의 위치를 변경
+			if (index == (*list)->length - 1)
+				(*list)->tailNode = currentNode;
+
 			LinkedList_Destructor(tempNode);
 		}
 
