@@ -344,7 +344,7 @@ void CLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
 		// 일반적인 경우
 		(*list)->tailNode->nextNode = newNode;
 		newNode->previousNode = (*list)->tailNode;
-		(*list)->tailNode = (*list)->tailNode->nextNode;
+		(*list)->tailNode = newNode;
 	}
 
 	(*list)->headNode->previousNode = (*list)->tailNode;
@@ -397,14 +397,14 @@ linkedListNode_t* CLL_Search(linkedList_t* list, int index) {
 
 	if (index <= list->length / 2) {
 		currentNode = list->headNode;
-		while (currentNode->nextNode != NULL && --index >= 0) {
+		while (currentNode->nextNode != list->headNode && --index >= 0) {
 			currentNode = currentNode->nextNode;
 		}
 	}
 	else {
 		int maxIndex = list->length - 1;
 		currentNode = list->tailNode;
-		while (currentNode->previousNode != NULL && --maxIndex >= index) {
+		while (currentNode->previousNode != list->tailNode && --maxIndex >= index) {
 			currentNode = currentNode->previousNode;
 		}
 	}
@@ -422,6 +422,7 @@ linkedListNode_t CLL_Delete(linkedList_t** list, int index) {
 			deletedNode = *tempNode;
 			(*list)->tailNode->previousNode = (*list)->headNode->nextNode;
 			(*list)->headNode = (*list)->headNode->nextNode;
+			tempNode->nextNode = NULL;
 			LinkedList_Destructor(tempNode);
 		}
 		else {
@@ -435,6 +436,7 @@ linkedListNode_t CLL_Delete(linkedList_t** list, int index) {
 			}
 			else {
 				// 테일을 삭제할 경우
+				(*list)->tailNode = currentNode->previousNode;
 				currentNode->previousNode->nextNode = (*list)->headNode;
 			}
 
