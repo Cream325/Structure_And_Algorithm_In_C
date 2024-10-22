@@ -198,7 +198,7 @@ void DLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
 			newNode->previousNode = (*list)->tailNode;
 		}
 
-		(*list)->tailNode = (*list)->tailNode->nextNode;
+		(*list)->tailNode = newNode;
 	}
 
 	(*list)->length++;
@@ -213,8 +213,8 @@ void DLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 
 	linkedListNode_t* newNode = LinkedList_Constructor(newData);
 
-	// 헤드 다음노드가 null인 경우, 인덱스가 0 이하인 경우
-	if ((*list)->headNode->nextNode == NULL || index <= 0) {
+	// 인덱스가 0 이하인 경우
+	if (index <= 0) {
 		newNode->nextNode = (*list)->headNode;
 		(*list)->headNode->previousNode = newNode;
 		(*list)->headNode = newNode;
@@ -224,16 +224,14 @@ void DLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 	
 	// 인덱스가 리스트 최대 인덱스 이상인 경우 (Append와 연산이 같음)
 	if (index >= (*list)->length - 1) {
-		(*list)->tailNode->nextNode = newNode;
-		newNode->previousNode = (*list)->tailNode;
-		(*list)->tailNode = (*list)->tailNode->nextNode;
-		(*list)->length++;
+		DLL_Append(list, newData);
 		return;
 	}
 
 	// 일반적인 경우
 	linkedListNode_t* currentNode = DLL_Search(*list, index);
 	currentNode->previousNode->nextNode = newNode;
+	newNode->previousNode = currentNode->previousNode;
 	newNode->nextNode = currentNode;
 	currentNode->previousNode = newNode;
 	(*list)->length++;
@@ -268,11 +266,13 @@ linkedListNode_t DLL_Delete(linkedList_t** list, int index) {
 			linkedListNode_t* tempNode = (*list)->headNode;
 			deletedNode = *tempNode;
 			(*list)->headNode = (*list)->headNode->nextNode;
+			tempNode->nextNode = NULL;
 			LinkedList_Destructor(tempNode);
 		}
 		else {
 			index = index >= (*list)->length ? (*list)->length - 1 : index;
 			linkedListNode_t* currentNode = DLL_Search(*list, index);
+			deletedNode = *currentNode;
 
 			// 중간노드를 삭제할 경우
 			if (currentNode->nextNode != NULL) {
@@ -283,10 +283,10 @@ linkedListNode_t DLL_Delete(linkedList_t** list, int index) {
 				// 테일을 삭제할 경우
 				(*list)->tailNode = currentNode->previousNode;
 				currentNode->previousNode->nextNode = NULL;
-				currentNode->previousNode = NULL;
 			}
 
-			deletedNode = *currentNode;
+			currentNode->nextNode = NULL;
+			currentNode->previousNode = NULL;
 			LinkedList_Destructor(currentNode);
 		}
 
