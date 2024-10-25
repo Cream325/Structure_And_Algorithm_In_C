@@ -2,19 +2,20 @@
 #include "CustomStack.h"
 
 int main(void) {
-	linkedList_t* list = CLL_Constructor();
+	linkedList_t* list;
+	SLL_Constructor(&list);
 
-	CLL_Append(&list, 1);
-	CLL_Append(&list, 2);
-	CLL_Append(&list, 3);
-	CLL_Append(&list, 4);
-	CLL_Append(&list, 5);
+	SLL_Append(&list, 1);
+	SLL_Append(&list, 2);
+	SLL_Append(&list, 3);
+	SLL_Append(&list, 4);
+	SLL_Append(&list, 5);
 
-	CLL_Insert(&list, 10, 1);
+	SLL_Insert(&list, 10, 1);
 
-	CLL_Traversal(list);
+	SLL_Traversal(list);
 
-	CLL_Destructor(list);
+	SLL_Destructor(list);
 
 	/*
 	arrayStack_t* stack = ArrStack_Constructor(5);

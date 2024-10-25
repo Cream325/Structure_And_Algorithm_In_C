@@ -2,17 +2,15 @@
 
 #pragma region LinkedListNode 함수
 
-linkedListNode_t* LinkedList_Constructor(ELEMENT_TYPE newData) {
+void LinkedList_Constructor(linkedListNode_t** node, ELEMENT_TYPE newData) {
 	// 노드 동적 할당
-	linkedListNode_t* newNode = (linkedListNode_t*)malloc(sizeof(linkedListNode_t));
+	(*node) = (linkedListNode_t*)malloc(sizeof(linkedListNode_t));
 
 	// 노드 데이터 대입
-	newNode->data = newData;
-	newNode->nextNode= NULL;
+	(*node)->data = newData;
+	(*node)->nextNode = NULL;
 
 	//printf("Node is Created\n");
-
-	return newNode;
 }
 
 void LinkedList_Destructor(linkedListNode_t* node) {
@@ -23,18 +21,16 @@ void LinkedList_Destructor(linkedListNode_t* node) {
 
 #pragma region SinglyLinkedList 함수
 
-linkedList_t* SLL_Constructor() {
+void SLL_Constructor(linkedList_t** list) {
 	// 링크드 리스트 동적 할당
-	linkedList_t* newList = (linkedList_t*)malloc(sizeof(linkedList_t));
+	(*list) = (linkedList_t*)malloc(sizeof(linkedList_t));
 
 	// 링크드 리스트 데이터 대입
-	newList->headNode = NULL;
-	newList->tailNode = NULL;
-	newList->length = 0;
+	(*list)->headNode = NULL;
+	(*list)->tailNode = NULL;
+	(*list)->length = 0;
 
 	//printf("SLL is Created\n");
-
-	return newList;
 }
 
 void SLL_Destructor(linkedList_t* list) {
@@ -47,7 +43,8 @@ void SLL_Destructor(linkedList_t* list) {
 }
 
 void SLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
-	linkedListNode_t* newNode = LinkedList_Constructor(newData);
+	linkedListNode_t* newNode;
+	LinkedList_Constructor(&newNode, newData);
 
 	// 헤드가 null인 경우
 	if ((*list)->headNode == NULL) {
@@ -73,7 +70,8 @@ void SLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 		return;
 	}
 
-	linkedListNode_t* newNode = LinkedList_Constructor(newData);
+	linkedListNode_t* newNode;
+	LinkedList_Constructor(&newNode, newData);
 
 	// 인덱스가 0 이하인 경우
 	if (index <= 0) {
@@ -156,18 +154,16 @@ void SLL_Traversal(linkedList_t* list) {
 
 #pragma region DoublyLinkedList 함수
 
-linkedList_t* DLL_Constructor() {
+void DLL_Constructor(linkedList_t** list) {
 	// 더블 링크드 리스트 동적 할당
-	linkedList_t* newList = (linkedList_t*)malloc(sizeof(linkedList_t));
+	(*list) = (linkedList_t*)malloc(sizeof(linkedList_t));
 
 	// 링크드 리스트 데이터 대입
-	newList->headNode = NULL;
-	newList->tailNode = NULL;
-	newList->length = 0;
+	(*list)->headNode = NULL;
+	(*list)->tailNode = NULL;
+	(*list)->length = 0;
 
 	//printf("DLL is Created\n");
-
-	return newList;
 }
 
 void DLL_Destructor(linkedList_t* list) {
@@ -180,7 +176,8 @@ void DLL_Destructor(linkedList_t* list) {
 }
 
 void DLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
-	linkedListNode_t* newNode = LinkedList_Constructor(newData);
+	linkedListNode_t* newNode;
+	LinkedList_Constructor(&newNode, newData);
 
 	// 헤드가 null인 경우
 	if ((*list)->headNode == NULL) {
@@ -211,7 +208,8 @@ void DLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 		return;
 	}
 
-	linkedListNode_t* newNode = LinkedList_Constructor(newData);
+	linkedListNode_t* newNode;
+	LinkedList_Constructor(&newNode, newData);
 
 	// 인덱스가 0 이하인 경우
 	if (index <= 0) {
@@ -309,16 +307,14 @@ void DLL_Traversal(linkedList_t* list) {
 
 #pragma region CircularLinkedList 함수
 
-linkedList_t* CLL_Constructor(void) {
+void CLL_Constructor(linkedList_t** list) {
 	// 순환 링크드 리스트 동적 할당
-	linkedList_t* newList = (linkedList_t*)malloc(sizeof(linkedList_t));
+	(*list) = (linkedList_t*)malloc(sizeof(linkedList_t));
 
 	// 링크드 리스트 데이터 대입
-	newList->headNode = NULL;
-	newList->tailNode = NULL;
-	newList->length = 0;
-
-	return newList;
+	(*list)->headNode = NULL;
+	(*list)->tailNode = NULL;
+	(*list)->length = 0;
 }
 
 void CLL_Destructor(linkedList_t* list) {
@@ -330,7 +326,8 @@ void CLL_Destructor(linkedList_t* list) {
 }
 
 void CLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
-	linkedListNode_t* newNode = LinkedList_Constructor(newData);
+	linkedListNode_t* newNode;
+	LinkedList_Constructor(&newNode, newData);
 
 	// 헤드가 null인 경우
 	if ((*list)->headNode == NULL) {
@@ -360,7 +357,8 @@ void CLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 		return;
 	}
 
-	linkedListNode_t* newNode = LinkedList_Constructor(newData);
+	linkedListNode_t* newNode;
+	LinkedList_Constructor(&newNode, newData);
 
 	// 헤드 다음노드가 null인 경우, 인덱스가 0이하인 경우
 	if ((*list)->headNode->nextNode == NULL || index <= 0) {
@@ -420,9 +418,8 @@ linkedListNode_t CLL_Delete(linkedList_t** list, int index) {
 		if ((*list)->headNode->nextNode == (*list)->tailNode || index <= 0) {
 			linkedListNode_t* tempNode = (*list)->headNode;
 			deletedNode = *tempNode;
-			(*list)->tailNode->previousNode = (*list)->headNode->nextNode;
-			(*list)->headNode = (*list)->headNode->nextNode;
 			tempNode->nextNode = NULL;
+			tempNode->previousNode = NULL;
 			LinkedList_Destructor(tempNode);
 		}
 		else {

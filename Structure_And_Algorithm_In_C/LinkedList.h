@@ -32,9 +32,9 @@ typedef struct linkedList_ {
 /// <summary>
 /// 노드 생성
 /// </summary>
+/// <param name="node"></param>
 /// <param name="newData"></param>
-/// <returns>Node* newNode</returns>
-linkedListNode_t* LinkedList_Constructor(ELEMENT_TYPE newData);
+void LinkedList_Constructor(linkedListNode_t** node, ELEMENT_TYPE newData);
 
 /// <summary>
 /// 노드 소멸
@@ -48,7 +48,7 @@ void LinkedList_Destructor(linkedListNode_t* node);
 /// <summary>
 /// 단일 링크드 리스트 - 생성자
 /// </summary>
-linkedList_t* SLL_Constructor(void);
+void SLL_Constructor(linkedList_t** list);
 
 /// <summary>
 /// 단일 링크드 리스트 - 소멸자
@@ -101,7 +101,7 @@ void SLL_Traversal(linkedList_t* list);
 /// </summary>
 /// <param name=""></param>
 /// <returns></returns>
-linkedList_t* DLL_Constructor(void);
+void DLL_Constructor(linkedList_t** list);
 
 /// <summary>
 /// 이중 링크드 리스트 - 소멸자
@@ -153,7 +153,7 @@ void DLL_Traversal(linkedList_t* list);
 /// 순환 링크드 리스트 - 생성자
 /// </summary>
 /// <returns></returns>
-linkedList_t* CLL_Constructor();
+void CLL_Constructor(linkedList_t** list);
 
 /// <summary>
 /// 순환 링크드 리스트 - 소멸자
