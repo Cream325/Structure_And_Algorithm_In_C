@@ -1,22 +1,39 @@
 #include "LinkedList.h"
 
+/*
+ - 메모리 할당(Attach) 함수와 해제(Detach) 함수 추가필요 (생성/소멸자와 할당/해제 분리)
+ - 생성자, 소멸자, 할당, 해제 함수는 static으로 코드 흐름이 보이지 않도록 함.
+*/
+
 #pragma region LinkedListNode 함수
 
-void LinkedList_Constructor(linkedListNode_t** node, ELEMENT_TYPE newData) {
-	// 노드 동적 할당
+void LinkedList_Attach(linkedListNode_t** node) {
 	(*node) = (linkedListNode_t*)malloc(sizeof(linkedListNode_t));
+}
+
+void LinkedList_Detach(linkedListNode_t* node) {
+	free(node);
+}
+
+void LinkedList_Constructor(linkedListNode_t* node, ELEMENT_TYPE newData) {
+	// 동적 할당
+	LinkedList_Attach(&node);
 
 	// 노드 데이터 대입
-	(*node)->data = newData;
-	(*node)->nextNode = NULL;
+	node->data = newData;
+	node->nextNode = NULL;
 
 	//printf("Node is Created\n");
 }
 
 void LinkedList_Destructor(linkedListNode_t* node) {
-	free(node);
+	node->nextNode = NULL;
+	node->previousNode = NULL;
+	LinkedList_Detach(node);
+
 	//printf("Node is Deleted\n");
 }
+
 #pragma endregion
 
 #pragma region SinglyLinkedList 함수
