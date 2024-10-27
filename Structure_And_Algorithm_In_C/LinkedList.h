@@ -31,18 +31,6 @@ typedef struct linkedList_ {
 #pragma region 노드 함수
 
 /// <summary>
-/// 노드 할당
-/// </summary>
-/// <param name="node"></param>
-void LinkedList_Attach(linkedListNode_t** node);
-
-/// <summary>
-/// 노드 해제
-/// </summary>
-/// <param name="node"></param>
-void LinkedList_Detach(linkedListNode_t* node);
-
-/// <summary>
 /// 노드 생성
 /// </summary>
 /// <param name="node"></param>
