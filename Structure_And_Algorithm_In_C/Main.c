@@ -3,19 +3,19 @@
 
 int main(void) {
 	linkedList_t* list;
-	SLL_Constructor(&list);
+	CLL_Constructor(&list);
 
-	SLL_Append(&list, 1);
-	SLL_Append(&list, 2);
-	SLL_Append(&list, 3);
-	SLL_Append(&list, 4);
-	SLL_Append(&list, 5);
+	CLL_Append(&list, 1);
+	CLL_Append(&list, 2);
+	CLL_Append(&list, 3);
+	CLL_Append(&list, 4);
+	CLL_Append(&list, 5);
 
-	SLL_Insert(&list, 10, 1);
+	CLL_Insert(&list, 10, 1);
 
-	SLL_Traversal(list);
+	CLL_Traversal(list);
 
-	SLL_Destructor(list);
+	CLL_Destructor(list);
 
 	/*
 	arrayStack_t* stack = ArrStack_Constructor(5);

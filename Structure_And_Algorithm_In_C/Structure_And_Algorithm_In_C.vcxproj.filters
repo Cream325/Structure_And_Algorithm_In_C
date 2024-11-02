@@ -13,12 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\LinkedList">
+      <UniqueIdentifier>{e1223a93-76d6-4761-86c7-a0daeaeb59c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Nodes">
+      <UniqueIdentifier>{c8a811b1-d383-426d-bbb8-5c24dceb0320}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="LinkedList.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CustomStack.h">
@@ -26,6 +29,18 @@
     </ClCompile>
     <ClCompile Include="CustomStack.c">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SinglyLinkedList.c">
+      <Filter>소스 파일\LinkedList</Filter>
+    </ClCompile>
+    <ClCompile Include="DoublyLinkedList.c">
+      <Filter>소스 파일\LinkedList</Filter>
+    </ClCompile>
+    <ClCompile Include="CircularLinkedList.c">
+      <Filter>소스 파일\LinkedList</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkedListNode.c">
+      <Filter>소스 파일\Nodes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

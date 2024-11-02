@@ -127,8 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CircularLinkedList.c" />
+    <ClCompile Include="DoublyLinkedList.c" />
+    <ClCompile Include="LinkedListNode.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="LinkedList.c" />
+    <ClCompile Include="SinglyLinkedList.c" />
     <ClCompile Include="CustomStack.c" />
     <ClCompile Include="CustomStack.h" />
   </ItemGroup>
