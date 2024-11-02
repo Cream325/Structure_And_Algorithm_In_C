@@ -107,6 +107,7 @@ linkedListNode_t SLL_Delete(linkedList_t** list, int index) {
 		}
 		else {
 			// 인덱스가 length-1이상일 경우, 일반적인 경우
+			index = index >= length - 1 ? length - 1 : index;
 			linkedListNode_t* currentNode = SLL_Search((*list), index - 1);
 			tempNode = currentNode->nextNode;
 			currentNode->nextNode = tempNode->nextNode;

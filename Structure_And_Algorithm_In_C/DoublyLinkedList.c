@@ -41,6 +41,7 @@ void DLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
 		newNode->previousNode = (*list)->headNode;
 	}
 	else {
+		// 일반적인 경우
 		(*list)->tailNode->nextNode = newNode;
 		newNode->previousNode = (*list)->tailNode;
 	}

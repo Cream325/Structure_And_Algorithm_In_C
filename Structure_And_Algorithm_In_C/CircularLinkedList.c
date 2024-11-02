@@ -47,6 +47,7 @@ void CLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
 		newNode->previousNode = (*list)->headNode;
 	}
 	else {
+		// 일반적인 경우
 		(*list)->tailNode->nextNode = newNode;
 		newNode->previousNode = (*list)->tailNode;
 	}
@@ -91,16 +92,18 @@ void CLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 linkedListNode_t* CLL_Search(linkedList_t* list, int index) {
 	linkedListNode_t* currentNode = list->headNode;
 
-	if (index <= list->length / 2) {
-		while (currentNode->nextNode != list->headNode && --index >= 0) {
-			currentNode = currentNode->nextNode;
+	if (currentNode != NULL) {
+		if (index <= list->length / 2) {
+			while (currentNode->nextNode != list->headNode && --index >= 0) {
+				currentNode = currentNode->nextNode;
+			}
 		}
-	}
-	else {
-		int maxIndex = list->length - 1;
-		currentNode = list->tailNode;
-		while (currentNode->previousNode != list->tailNode && --maxIndex >= index) {
-			currentNode = currentNode->previousNode;
+		else {
+			int maxIndex = list->length - 1;
+			currentNode = list->tailNode;
+			while (currentNode->previousNode != list->tailNode && --maxIndex >= index) {
+				currentNode = currentNode->previousNode;
+			}
 		}
 	}
 
