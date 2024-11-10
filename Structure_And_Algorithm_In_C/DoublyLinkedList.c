@@ -24,6 +24,10 @@ void DLL_Destructor(linkedList_t* list) {
 }
 
 void DLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
+	DLL_Insert(list, newData, (*list)->length);
+}
+
+void DLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 	linkedListNode_t* newNode;
 	LinkedList_Constructor(&newNode, newData);
 
@@ -31,40 +35,25 @@ void DLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
 	if ((*list)->headNode == NULL) {
 		(*list)->headNode = newNode;
 		(*list)->tailNode = (*list)->headNode;
-		(*list)->length++;
-		return;
 	}
-
-	// Head가 Tail과 같은 경우
-	if ((*list)->headNode == (*list)->tailNode) {
-		(*list)->headNode->nextNode = newNode;
-		newNode->previousNode = (*list)->headNode;
-	}
-	else {
-		// 일반적인 경우
-		(*list)->tailNode->nextNode = newNode;
-		newNode->previousNode = (*list)->tailNode;
-	}
-
-	(*list)->tailNode = newNode;
-	(*list)->length++;
-}
-
-void DLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
-	// Head가 null인 경우, 인덱스가 length-1이상인 경우
-	if ((*list)->headNode == NULL || index >= (*list)->length - 1) {
-		DLL_Append(list, newData);
-		return;
-	}
-
-	linkedListNode_t* newNode;
-	LinkedList_Constructor(&newNode, newData);
-
-	// 인덱스가 0이하인 경우
-	if (index <= 0) {
+	else if (index <= 0) {
+		// 인덱스가 0이하인 경우
 		newNode->nextNode = (*list)->headNode;
 		(*list)->headNode->previousNode = newNode;
 		(*list)->headNode = newNode;
+	}
+	else if (index >= (*list)->length - 1) {
+		// 인덱스가 length-1이상인 경우
+		if ((*list)->headNode == (*list)->tailNode) {
+			(*list)->headNode->nextNode = newNode;
+			newNode->previousNode = (*list)->headNode;
+		}
+		else {
+			(*list)->tailNode->nextNode = newNode;
+			newNode->previousNode = (*list)->tailNode;
+		}
+
+		(*list)->tailNode = newNode;
 	}
 	else {
 		// 일반적인 경우
@@ -79,20 +68,20 @@ void DLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 }
 
 linkedListNode_t* DLL_Search(linkedList_t* list, int index) {
+	if (list->headNode == NULL) return NULL;
+
 	linkedListNode_t* currentNode = list->headNode;
 
-	if (currentNode != NULL) {
-		if (index <= list->length / 2) {
-			while (currentNode->nextNode != NULL && --index >= 0) {
-				currentNode = currentNode->nextNode;
-			}
+	if (index <= list->length / 2) {
+		while (currentNode->nextNode != NULL && --index >= 0) {
+			currentNode = currentNode->nextNode;
 		}
-		else {
-			int maxIndex = list->length - 1;
-			currentNode = list->tailNode;
-			while (currentNode->previousNode != NULL && --maxIndex >= index) {
-				currentNode = currentNode->previousNode;
-			}
+	}
+	else {
+		int maxIndex = list->length - 1;
+		currentNode = list->tailNode;
+		while (currentNode->previousNode != NULL && --maxIndex >= index) {
+			currentNode = currentNode->previousNode;
 		}
 	}
 
@@ -101,37 +90,33 @@ linkedListNode_t* DLL_Search(linkedList_t* list, int index) {
 
 linkedListNode_t DLL_Delete(linkedList_t** list, int index) {
 	// Head가 null인 경우
-	if((*list)->headNode == NULL)
-		return;
+	if((*list)->headNode == NULL) return;
 
 	linkedListNode_t deletedNode;
 	linkedListNode_t* tempNode;
 
-	// Head가 Tail과 같을 경우
 	if ((*list)->headNode == (*list)->tailNode) {
+		// Head와 Tail이 같을 경우
 		tempNode = (*list)->headNode;
 		(*list)->headNode = NULL;
 		(*list)->tailNode = NULL;
 	}
-	else {
+	else if (index <= 0) {
 		// 인덱스가 0이하일 경우
-		if (index <= 0) {
-			tempNode = (*list)->headNode;
-			(*list)->headNode->nextNode->previousNode = NULL;
-			(*list)->headNode = (*list)->headNode->nextNode;
-		}
-		else {
-			linkedListNode_t* currentNode = DLL_Search((*list), index);
-			tempNode = currentNode;
-			currentNode->previousNode->nextNode = currentNode->nextNode;
+		tempNode = (*list)->headNode;
+		(*list)->headNode->nextNode->previousNode = NULL;
+		(*list)->headNode = (*list)->headNode->nextNode;
+	}
+	else {
+		// 인덱스가 length-1이상일 경우, 일반적인 경우
+		linkedListNode_t* currentNode = DLL_Search((*list), index);
+		tempNode = currentNode;
+		currentNode->previousNode->nextNode = currentNode->nextNode;
 
-			// 인덱스가 length-1이상일 경우
-			if (index >= (*list)->length - 1)
-				(*list)->tailNode = currentNode->previousNode;
-			else
-				// 일반적인 경우
-				currentNode->nextNode->previousNode = currentNode->previousNode;
-		}
+		if (index >= (*list)->length - 1)
+			(*list)->tailNode = currentNode->previousNode;
+		else
+			currentNode->nextNode->previousNode = currentNode->previousNode;
 	}
 
 	deletedNode = (*tempNode);
@@ -142,12 +127,14 @@ linkedListNode_t DLL_Delete(linkedList_t** list, int index) {
 }
 
 void DLL_Traversal(linkedList_t* list) {
+	if (list->headNode == NULL) return;
+
 	linkedListNode_t* currentNode = list->headNode;
 
-	while (currentNode != NULL) {
+	do {
 		printf("%d ", currentNode->data);
 		currentNode = currentNode->nextNode;
-	}
+	} while (currentNode != list->headNode && currentNode != NULL);
 }
 
 #pragma endregion

@@ -24,58 +24,39 @@ void CLL_Destructor(linkedList_t* list) {
 }
 
 void CLL_Append(linkedList_t** list, ELEMENT_TYPE newData) {
+	CLL_Insert(list, newData, (*list)->length);
+}
+
+void CLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 	linkedListNode_t* newNode;
 	LinkedList_Constructor(&newNode, newData);
 
-	// Head가 null인 경우
 	if ((*list)->headNode == NULL) {
+		// Head가 null인 경우
 		(*list)->headNode = newNode;
 		(*list)->tailNode = (*list)->headNode;
 
 		(*list)->headNode->nextNode = (*list)->tailNode;
 		(*list)->tailNode->previousNode = (*list)->headNode;
-		
-		(*list)->headNode->previousNode = (*list)->tailNode;
-		(*list)->tailNode->nextNode = (*list)->headNode;
-		(*list)->length++;
-		return;
 	}
-
-	// Head가 Tail과 같은 경우
-	if ((*list)->headNode == (*list)->tailNode) {
-		(*list)->headNode->nextNode = newNode;
-		newNode->previousNode = (*list)->headNode;
-	}
-	else {
-		// 일반적인 경우
-		(*list)->tailNode->nextNode = newNode;
-		newNode->previousNode = (*list)->tailNode;
-	}
-
-	(*list)->tailNode = newNode;
-	(*list)->headNode->previousNode = (*list)->tailNode;
-	(*list)->tailNode->nextNode = (*list)->headNode;
-	(*list)->length++;
-}
-
-void CLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
-	// Head가 null인 경우. 인덱스가 length-1이상인 경우
-	if ((*list)->headNode == NULL || index >= (*list)->length - 1) {
-		CLL_Append(list, newData);
-		return;
-	}
-
-	linkedListNode_t* newNode;
-	LinkedList_Constructor(&newNode, newData);
-
-	// 인덱스가 0이하인 경우
-	if (index <= 0) {
+	else if (index <= 0) {
+		// 인덱스가 0이하인 경우
 		newNode->nextNode = (*list)->headNode;
 		(*list)->headNode->previousNode = newNode;
 		(*list)->headNode = newNode;
+	}
+	else if (index >= (*list)->length - 1) {
+		// 인덱스가 length-1이상인 경우
+		if ((*list)->headNode == (*list)->tailNode) {
+			(*list)->headNode->nextNode = newNode;
+			newNode->previousNode = (*list)->headNode;
+		}
+		else {
+			(*list)->tailNode->nextNode = newNode;
+			newNode->previousNode = (*list)->tailNode;
+		}
 
-		(*list)->headNode->previousNode = (*list)->tailNode;
-		(*list)->tailNode->nextNode = (*list)->headNode;
+		(*list)->tailNode = newNode;
 	}
 	else {
 		// 일반적인 경우
@@ -86,24 +67,26 @@ void CLL_Insert(linkedList_t** list, ELEMENT_TYPE newData, int index) {
 		currentNode->previousNode = newNode;
 	}
 
+	(*list)->headNode->previousNode = (*list)->tailNode;
+	(*list)->tailNode->nextNode = (*list)->headNode;
 	(*list)->length++;
 }
 
 linkedListNode_t* CLL_Search(linkedList_t* list, int index) {
+	if (list->headNode == NULL) return NULL;
+
 	linkedListNode_t* currentNode = list->headNode;
 
-	if (currentNode != NULL) {
-		if (index <= list->length / 2) {
-			while (currentNode->nextNode != list->headNode && --index >= 0) {
-				currentNode = currentNode->nextNode;
-			}
+	if (index <= list->length / 2) {
+		while (currentNode->nextNode != list->headNode && --index >= 0) {
+			currentNode = currentNode->nextNode;
 		}
-		else {
-			int maxIndex = list->length - 1;
-			currentNode = list->tailNode;
-			while (currentNode->previousNode != list->tailNode && --maxIndex >= index) {
-				currentNode = currentNode->previousNode;
-			}
+	}
+	else {
+		int maxIndex = list->length - 1;
+		currentNode = list->tailNode;
+		while (currentNode->previousNode != list->tailNode && --maxIndex >= index) {
+			currentNode = currentNode->previousNode;
 		}
 	}
 
@@ -112,46 +95,37 @@ linkedListNode_t* CLL_Search(linkedList_t* list, int index) {
 
 linkedListNode_t CLL_Delete(linkedList_t** list, int index) {
 	// Head가 null인 경우
-	if((*list)->headNode == NULL)
-		return;
+	if((*list)->headNode == NULL) return;
 
 	linkedListNode_t deletedNode;
 	linkedListNode_t* tempNode;
 
-	// Head가 Tail과 같을 경우
 	if ((*list)->headNode == (*list)->tailNode) {
+		// Head와 Tail이 같을 경우
 		tempNode = (*list)->headNode;
 		(*list)->headNode = NULL;
 		(*list)->tailNode = NULL;
 	}
-	else {
+	else if (index <= 0) {
 		// 인덱스가 0이하일 경우
-		if (index <= 0) {
-			tempNode = (*list)->headNode;
-			(*list)->headNode->nextNode->previousNode = NULL;
-			(*list)->headNode = (*list)->headNode->nextNode;
+		tempNode = (*list)->headNode;
+		(*list)->headNode->nextNode->previousNode = NULL;
+		(*list)->headNode = (*list)->headNode->nextNode;
+	}
+	else {
+		// 인덱스가 length-1이상일 경우, 일반적인 경우
+		linkedListNode_t* currentNode = CLL_Search((*list), index);
+		tempNode = currentNode;
+		currentNode->previousNode->nextNode = currentNode->nextNode;
 
-			(*list)->headNode->previousNode = (*list)->tailNode;
-			(*list)->tailNode->nextNode = (*list)->headNode;
-		}
-		else {
-			linkedListNode_t* currentNode = CLL_Search((*list), index);
-			tempNode = currentNode;
-			currentNode->previousNode->nextNode = currentNode->nextNode;
-
-			// 인덱스가 length-1이상일 경우
-			if (index >= (*list)->length - 1) {
-				(*list)->tailNode = currentNode->previousNode;
-
-				(*list)->headNode->previousNode = (*list)->tailNode;
-				(*list)->tailNode->nextNode = (*list)->headNode;
-			}
-			else
-				// 일반적인 경우
-				currentNode->nextNode->previousNode = currentNode->previousNode;
-		}
+		if (index >= (*list)->length - 1)
+			(*list)->tailNode = currentNode->previousNode;
+		else
+			currentNode->nextNode->previousNode = currentNode->previousNode;
 	}
 
+	(*list)->headNode->previousNode = (*list)->tailNode;
+	(*list)->tailNode->nextNode = (*list)->headNode;
 	deletedNode = (*tempNode);
 	LinkedList_Destructor(tempNode);
 	(*list)->length--;
@@ -160,15 +134,14 @@ linkedListNode_t CLL_Delete(linkedList_t** list, int index) {
 }
 
 void CLL_Traversal(linkedList_t* list) {
-	linkedListNode_t* currentNode = list->headNode;
+	if (list->headNode == NULL) return;
 
-	if (currentNode == NULL)
-		return;
+	linkedListNode_t* currentNode = list->headNode;
 
 	do {
 		printf("%d ", currentNode->data);
 		currentNode = currentNode->nextNode;
-	} while (currentNode != list->headNode);
+	} while (currentNode != list->headNode && currentNode != NULL);
 }
 
 #pragma endregion
