@@ -42,6 +42,12 @@
     <ClCompile Include="LinkedListNode.c">
       <Filter>소스 파일\Nodes</Filter>
     </ClCompile>
+    <ClCompile Include="RuntimeError.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="RuntimeError.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LinkedList.h">

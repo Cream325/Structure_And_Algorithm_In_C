@@ -131,6 +131,8 @@
     <ClCompile Include="DoublyLinkedList.c" />
     <ClCompile Include="LinkedListNode.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="RuntimeError.c" />
+    <ClCompile Include="RuntimeError.h" />
     <ClCompile Include="SinglyLinkedList.c" />
     <ClCompile Include="CustomStack.c" />
     <ClCompile Include="CustomStack.h" />
