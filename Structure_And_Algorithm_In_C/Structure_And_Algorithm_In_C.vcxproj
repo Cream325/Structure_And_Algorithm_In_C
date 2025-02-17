@@ -127,18 +127,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CircularLinkedList.c" />
-    <ClCompile Include="DoublyLinkedList.c" />
-    <ClCompile Include="LinkedListNode.c" />
+    <ClCompile Include="linkedList.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="RuntimeError.c" />
-    <ClCompile Include="RuntimeError.h" />
-    <ClCompile Include="SinglyLinkedList.c" />
+    <ClCompile Include="runtimeError.c" />
+    <ClCompile Include="runtimeError.h" />
     <ClCompile Include="CustomStack.c" />
     <ClCompile Include="CustomStack.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LinkedList.h" />
+    <ClInclude Include="linkedList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
